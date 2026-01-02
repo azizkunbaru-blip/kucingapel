@@ -9,12 +9,13 @@ const finalScoreEl = document.getElementById("finalScore");
 const startBtn = document.getElementById("startBtn");
 const restartBtn = document.getElementById("restartBtn");
 const leftBtn = document.getElementById("leftBtn");
+const upBtn = document.getElementById("upBtn");
 const rightBtn = document.getElementById("rightBtn");
 
 const state = {
   running: false,
   score: 0,
-  lives: 3,
+  lives: 10,
   level: 1,
   speed: 80,
   apples: [],
@@ -22,6 +23,7 @@ const state = {
   spawnInterval: 1.4,
   moveDir: 0,
   pointerActive: false,
+  stickActive: false,
 };
 
 const player = {
@@ -61,12 +63,13 @@ function beep(frequency, duration, type = "square") {
 
 function resetGame() {
   state.score = 0;
-  state.lives = 3;
+  state.lives = 10;
   state.level = 1;
   state.speed = 80;
   state.apples = [];
   state.spawnTimer = 0;
   state.spawnInterval = 1.4;
+  state.stickActive = false;
   player.x = world.width / 2 - player.width / 2;
   updateHud();
 }
@@ -131,7 +134,7 @@ function updateApples(delta) {
   });
 
   state.apples = state.apples.filter((apple) => {
-    const caught = checkCollision(apple, player);
+    const caught = getCatchRects().some((rect) => checkCollision(apple, rect));
     if (caught) {
       state.score += 1;
       beep(660, 0.12, "triangle");
@@ -159,6 +162,21 @@ function checkCollision(apple, basket) {
     apple.y < basket.y + basket.height &&
     apple.y + apple.size > basket.y
   );
+}
+
+function getCatchRects() {
+  const rects = [{ ...player }];
+  if (!state.stickActive) {
+    return rects;
+  }
+  const stickHeight = 80;
+  rects.push({
+    x: player.x + player.width / 2 - 6,
+    y: player.y - stickHeight,
+    width: 12,
+    height: stickHeight + player.height,
+  });
+  return rects;
 }
 
 function drawBackground(time) {
@@ -290,6 +308,21 @@ function drawPlayer() {
   ctx.fillStyle = "#b57b2e";
   ctx.fillRect(x + 12, y - 6, 8, 8);
   ctx.fillRect(x + 40, y - 6, 8, 8);
+
+  if (state.stickActive) {
+    drawStick();
+  }
+}
+
+function drawStick() {
+  const stickX = player.x + player.width / 2 - 2;
+  const stickY = player.y - 80;
+  ctx.fillStyle = "#d8c27b";
+  ctx.fillRect(stickX, stickY, 4, 80);
+  ctx.fillStyle = "#8b6a3e";
+  ctx.fillRect(stickX + 1, stickY + 10, 2, 60);
+  ctx.fillStyle = "#f2e2a6";
+  ctx.fillRect(stickX - 2, stickY - 6, 8, 8);
 }
 
 function drawApples() {
@@ -329,6 +362,9 @@ function handleKey(event, isDown) {
   }
   if (event.key === "ArrowRight" || event.key === "d" || event.key === "D") {
     state.moveDir = isDown ? 1 : state.moveDir === 1 ? 0 : state.moveDir;
+  }
+  if (event.key === "ArrowUp" || event.key === "w" || event.key === "W") {
+    state.stickActive = isDown;
   }
 }
 
@@ -378,6 +414,16 @@ rightBtn.addEventListener("pointerup", () => {
 });
 rightBtn.addEventListener("pointerleave", () => {
   state.moveDir = 0;
+});
+
+upBtn.addEventListener("pointerdown", () => {
+  state.stickActive = true;
+});
+upBtn.addEventListener("pointerup", () => {
+  state.stickActive = false;
+});
+upBtn.addEventListener("pointerleave", () => {
+  state.stickActive = false;
 });
 
 addPointerControls();
