@@ -14,7 +14,7 @@
 
 body {
   margin: 0;
-  background: radial-gradient(circle at top, #2f2f55, var(--bg));
+  background: radial-gradient(circle at top, #32325b, var(--bg));
   color: var(--text);
   min-height: 100vh;
 }
@@ -43,18 +43,31 @@ body {
 .game-shell {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   align-items: center;
 }
 
 .hud {
-  display: flex;
-  gap: 20px;
-  background: var(--panel);
-  padding: 8px 16px;
-  border-radius: 12px;
-  box-shadow: 0 6px 0 var(--shadow);
+  position: sticky;
+  top: 12px;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(4, auto) 1fr;
+  align-items: center;
+  gap: 12px 18px;
+  width: min(92vw, 640px);
+  background: rgba(32, 32, 55, 0.85);
+  padding: 12px 16px;
+  border-radius: 16px;
+  box-shadow: 0 10px 0 var(--shadow);
+  backdrop-filter: blur(6px);
   font-weight: 600;
+}
+
+.hud-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .canvas-wrap {
@@ -77,13 +90,11 @@ canvas {
 }
 
 .controls {
+  position: sticky;
+  bottom: 12px;
   display: flex;
-  gap: 12px;
-}
-
-.actions {
-  display: flex;
-  gap: 12px;
+  gap: 16px;
+  z-index: 4;
 }
 
 .btn {
@@ -95,6 +106,10 @@ canvas {
   cursor: pointer;
   box-shadow: 0 4px 0 #ae9032;
   transition: transform 0.1s ease;
+}
+
+.btn:hover {
+  filter: brightness(1.05);
 }
 
 .btn:active {
@@ -153,7 +168,7 @@ canvas {
 
 @media (max-width: 600px) {
   .hud {
-    flex-wrap: wrap;
+    grid-template-columns: repeat(2, auto);
     justify-content: center;
   }
 
@@ -161,9 +176,20 @@ canvas {
     width: 100%;
     justify-content: space-evenly;
   }
+}
 
-  .actions {
-    width: 100%;
-    justify-content: center;
+@media (max-width: 480px) {
+  .hud {
+    gap: 8px 14px;
+    font-size: 0.95rem;
+  }
+
+  .controls {
+    position: fixed;
+    bottom: 16px;
+  }
+
+  .canvas-wrap {
+    width: min(92vw, 420px);
   }
 }
