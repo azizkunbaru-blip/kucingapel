@@ -16,8 +16,9 @@
     <main class="game-shell">
       <div class="hud" aria-live="polite">
         <div>Skor: <span id="score">0</span></div>
-        <div>Nyawa: <span id="lives">3</span></div>
+        <div>Nyawa: <span id="lives">5</span></div>
         <div>Level: <span id="level">1</span></div>
+        <div>Highscore: <span id="highscore">0</span></div>
       </div>
 
       <div class="canvas-wrap">
@@ -33,7 +34,8 @@
           <div class="panel">
             <h2>Game Over</h2>
             <p>Skor Akhir: <span id="finalScore">0</span></p>
-            <button id="restartBtn" class="btn">Restart</button>
+            <p>Highscore: <span id="finalHighscore">0</span></p>
+            <button id="restartBtn" class="btn">Main Lagi</button>
           </div>
         </div>
       </div>
@@ -44,12 +46,18 @@
         <button id="rightBtn" class="btn ghost" aria-label="Gerak kanan">▶</button>
       </div>
 
+      <div class="actions">
+        <button id="pauseBtn" class="btn">Pause</button>
+        <button id="restartBtnAlt" class="btn ghost">Restart</button>
+      </div>
+
       <section class="instructions">
         <h3>Cara Main</h3>
         <ul>
           <li>Tangkap apel yang jatuh untuk menambah skor.</li>
           <li>Jika apel menyentuh tanah, nyawa berkurang.</li>
           <li>Tekan tombol atas (W/↑) untuk mengangkat tongkat agar menjangkau apel tinggi.</li>
+          <li>Apel emas memberi skor besar, hati menambah nyawa, batu/bom berbahaya.</li>
           <li>Game Over saat nyawa habis. Tekan Restart untuk bermain lagi.</li>
         </ul>
       </section>
