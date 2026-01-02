@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panen Apel Kucing Pixel</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <h1>Panen Apel Kucing Pixel</h1>
+      <p class="subtitle">Tangkap apel yang jatuh dengan keranjang si kucing!</p>
+    </header>
+
+    <main class="game-shell">
+      <div class="hud" aria-live="polite">
+        <div>Skor: <span id="score">0</span></div>
+        <div>Nyawa: <span id="lives">5</span></div>
+        <div>Level: <span id="level">1</span></div>
+        <div>Highscore: <span id="highscore">0</span></div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="game" width="480" height="640" aria-label="Game canvas"></canvas>
+        <div id="startOverlay" class="overlay active">
+          <div class="panel">
+            <h2>Mulai Panen!</h2>
+            <p>Gunakan tombol kiri/kanan (atau A/D). Di HP gunakan tombol layar atau geser.</p>
+            <button id="startBtn" class="btn">Play</button>
+          </div>
+        </div>
+        <div id="gameOverOverlay" class="overlay">
+          <div class="panel">
+            <h2>Game Over</h2>
+            <p>Skor Akhir: <span id="finalScore">0</span></p>
+            <p>Highscore: <span id="finalHighscore">0</span></p>
+            <button id="restartBtn" class="btn">Main Lagi</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="leftBtn" class="btn ghost" aria-label="Gerak kiri">◀</button>
+        <button id="upBtn" class="btn ghost" aria-label="Arahkan tongkat ke atas">▲</button>
+        <button id="rightBtn" class="btn ghost" aria-label="Gerak kanan">▶</button>
+      </div>
+
+      <div class="actions">
+        <button id="pauseBtn" class="btn">Pause</button>
+        <button id="restartBtnAlt" class="btn ghost">Restart</button>
+      </div>
+
+      <section class="instructions">
+        <h3>Cara Main</h3>
+        <ul>
+          <li>Tangkap apel yang jatuh untuk menambah skor.</li>
+          <li>Jika apel menyentuh tanah, nyawa berkurang.</li>
+          <li>Tekan tombol atas (W/↑) untuk mengangkat tongkat agar menjangkau apel tinggi.</li>
+          <li>Apel emas memberi skor besar, hati menambah nyawa, batu/bom berbahaya.</li>
+          <li>Game Over saat nyawa habis. Tekan Restart untuk bermain lagi.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
