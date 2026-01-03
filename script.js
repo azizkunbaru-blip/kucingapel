@@ -420,6 +420,62 @@ const FXManager = {
   },
 };
 
+class FallingLeaf {
+  constructor() {
+    this.reset(true);
+  }
+
+  reset(fromTop = false) {
+    this.x = Math.random() * world.width;
+    this.y = fromTop ? -20 - Math.random() * 40 : Math.random() * world.height;
+    this.size = 6 + Math.random() * 8;
+    this.speed = 12 + Math.random() * 18;
+    this.swing = 0.6 + Math.random() * 1.2;
+    this.swingOffset = Math.random() * Math.PI * 2;
+    this.opacity = 0.6 + Math.random() * 0.3;
+    this.color = Math.random() > 0.5 ? "#6ecf5b" : "#3f9b4c";
+  }
+
+  update(delta, time) {
+    this.y += this.speed * delta;
+    this.x += Math.sin(time * 0.002 + this.swingOffset) * this.swing;
+  }
+
+  draw() {
+    ctx.globalAlpha = this.opacity;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.ellipse(this.x, this.y, this.size * 0.6, this.size, 0.6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
+const leaves = [];
+const MAX_LEAVES = 20;
+
+function spawnLeaf() {
+  if (leaves.length >= MAX_LEAVES) return;
+  leaves.push(new FallingLeaf());
+}
+
+function updateLeaves(delta, time) {
+  if (leaves.length < MAX_LEAVES && Math.random() < 0.05) {
+    spawnLeaf();
+  }
+  for (let i = leaves.length - 1; i >= 0; i -= 1) {
+    const leaf = leaves[i];
+    leaf.update(delta, time);
+    if (leaf.y - leaf.size > world.height) {
+      leaves.splice(i, 1);
+    }
+  }
+}
+
+function drawLeaves() {
+  leaves.forEach((leaf) => leaf.draw());
+}
+
 const AppleManager = {
   items: [],
 
@@ -672,6 +728,7 @@ const InputManager = {
 function resetGame() {
   GameState.reset();
   AppleManager.reset();
+  leaves.length = 0;
   Player.reset();
   UIManager.updateHUD();
 }
@@ -929,6 +986,7 @@ function loop(timestamp) {
     UIManager.updateScoreDisplay(delta);
     FXManager.update(delta);
   }
+  updateLeaves(effectsDelta, timestamp);
 
   if (GameState.shakeTimer > 0) {
     GameState.shakeTimer -= effectsDelta;
@@ -945,6 +1003,7 @@ function loop(timestamp) {
   }
   drawBackground(timestamp);
   drawGroundLine();
+  drawLeaves();
   AppleManager.draw();
   Player.draw();
   FXManager.draw();
